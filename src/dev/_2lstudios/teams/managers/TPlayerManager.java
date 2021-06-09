@@ -36,7 +36,7 @@ public class TPlayerManager {
         Server server = this.plugin.getServer();
         Player onlinePlayer = server.getPlayer(name);
         if (onlinePlayer != null) {
-          Player player = onlinePlayer;
+          offlinePlayer = onlinePlayer;
         } else {
           offlinePlayer = this.plugin.getServer()
               .getOfflinePlayer(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes()));
@@ -56,7 +56,7 @@ public class TPlayerManager {
 
   public void update(boolean ignoreOnline, boolean sync) {
     Collection<TPlayer> tPlayerMapValues = this.tPlayerMap.values();
-    for (TPlayer tPlayer : new HashSet(tPlayerMapValues)) {
+    for (TPlayer tPlayer : new HashSet<>(tPlayerMapValues)) {
       if (ignoreOnline || !tPlayer.isOnline()) {
         if (tPlayer.isChanged())
           tPlayer.save(sync);

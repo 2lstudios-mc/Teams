@@ -44,12 +44,7 @@ public class JSONUtil {
   public static void save(String path, JSONObject jsonObject, boolean sync) {
     Runnable runnable = () -> {
       File file = create(path);
-      try {
-        Exception exception2;
-        Exception exception1 = null;
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+      // TODO: Broken code
     };
     runTask(sync, runnable);
   }
@@ -58,23 +53,7 @@ public class JSONUtil {
     File file = new File(path.replace("%datafolder%", dataFolder));
     if (file.exists() && !file.isDirectory()) {
       JSONParser jsonParser = new JSONParser();
-      try {
-        Exception exception1 = null, exception2 = null;
-        try {
-
-        } finally {
-          exception2 = null;
-          if (exception1 == null) {
-            exception1 = exception2;
-          } else if (exception1 != exception2) {
-            exception1.addSuppressed(exception2);
-          }
-        }
-      } catch (IOException e) {
-        e.printStackTrace();
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
+      // TODO: Broken code
     }
     return new JSONObject();
   }

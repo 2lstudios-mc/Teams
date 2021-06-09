@@ -2,12 +2,13 @@ package dev._2lstudios.teams.placeholders;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import twolovers.classes.Classes;
+import twolovers.classes.plugin.ClassPlayer;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import dev._2lstudios.classes.Classes;
-import dev._2lstudios.classes.plugin.ClassPlayer;
 import dev._2lstudios.teams.enums.Relation;
 import dev._2lstudios.teams.managers.TPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
@@ -23,10 +24,6 @@ public class TeamsPlaceholders extends PlaceholderExpansion {
   public TeamsPlaceholders(Plugin plugin, TeamsManager teamsManager) {
     this.plugin = plugin;
     this.teamsManager = teamsManager;
-  }
-  
-  public void unregister() {
-    PlaceholderAPI.unregisterPlaceholderHook(getIdentifier());
   }
   
   private boolean isArcherTagged(String name) {

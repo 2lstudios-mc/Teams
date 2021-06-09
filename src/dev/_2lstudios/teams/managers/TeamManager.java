@@ -64,7 +64,7 @@ public class TeamManager {
     JSONUtil.delete("%datafolder%/teams/" + name + ".json", sync);
     if (removeMap)
       this.teamMap.remove(name);
-    for (String teamPlayerName : new HashSet(team.getMembers().keySet()))
+    for (String teamPlayerName : new HashSet<>(team.getMembers().keySet()))
       team.removePlayer(this.teamsManager.getTPlayerManager().getPlayer(teamPlayerName));
   }
 
