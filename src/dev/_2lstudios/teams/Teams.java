@@ -1,15 +1,12 @@
 package dev._2lstudios.teams;
 
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+
 import dev._2lstudios.teams.commands.HeadQuartersCommand;
 import dev._2lstudios.teams.commands.TeamsCommand;
 import dev._2lstudios.teams.commands.TellLocationCommand;
@@ -27,6 +24,7 @@ import dev._2lstudios.teams.placeholders.TeamsPlaceholders;
 import dev._2lstudios.teams.team.Team;
 import dev._2lstudios.teams.utils.ConfigurationUtil;
 import dev._2lstudios.teams.utils.JSONUtil;
+import net.milkbowl.vault.economy.Economy;
 
 public class Teams extends JavaPlugin {
   private Economy economy;
