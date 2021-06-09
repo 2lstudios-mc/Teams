@@ -1,0 +1,4 @@
+# Enable/Disable pvp by default on teams.
+pvp: false
+# Enable/Disable home creation.
+homes: true
