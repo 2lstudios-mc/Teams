@@ -16,8 +16,8 @@ class TeamsSethomeCommand {
   private boolean isRegionMember(PluginManager pluginManager, Player player, String senderName) {
     if (pluginManager.isPluginEnabled("WorldSentinel")) {
       Region region = WorldSentinel.getInstance().getRegionPlayerManager().getPlayer(player).getRegion();
-      if (region != null && !region.getFlagAsCollection("owners").contains(senderName)
-          && !region.getFlagAsCollection("members").contains(senderName))
+      if (region != null && !region.getFlags().getCollection("owners").contains(senderName)
+          && !region.getFlags().getCollection("members").contains(senderName))
         return false;
     }
     return true;
