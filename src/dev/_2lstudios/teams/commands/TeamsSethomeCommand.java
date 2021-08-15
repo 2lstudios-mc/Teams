@@ -9,8 +9,8 @@ import dev._2lstudios.teams.managers.TPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
 import dev._2lstudios.teams.team.TPlayer;
 import dev._2lstudios.teams.team.Team;
-import twolovers.worldsentinel.WorldSentinel;
-import twolovers.worldsentinel.region.Region;
+import dev._2lstudios.worldsentinel.WorldSentinel;
+import dev._2lstudios.worldsentinel.region.Region;
 
 class TeamsSethomeCommand {
   private boolean isRegionMember(PluginManager pluginManager, Player player, String senderName) {
