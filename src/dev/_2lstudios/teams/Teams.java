@@ -17,7 +17,7 @@ import dev._2lstudios.teams.listeners.EntityDamageListener;
 import dev._2lstudios.teams.listeners.PlayerJoinListener;
 import dev._2lstudios.teams.listeners.PlayerMoveListener;
 import dev._2lstudios.teams.listeners.PlayerQuitListener;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
 import dev._2lstudios.teams.managers.TeamsManager;
 import dev._2lstudios.teams.placeholders.TeamsPlaceholders;
@@ -59,7 +59,7 @@ public class Teams extends JavaPlugin {
     teamsManager = new TeamsManager(this, configurationUtil);
 
     TeamManager teamManager = teamsManager.getTeamManager();
-    TPlayerManager tPlayerManager = teamsManager.getTPlayerManager();
+    TeamPlayerManager tPlayerManager = teamsManager.getTeamPlayerManager();
 
     for (Player player : server.getOnlinePlayers()) {
       String playerName = player.getName();
@@ -97,7 +97,7 @@ public class Teams extends JavaPlugin {
 
   public void onDisable() {
     TeamManager teamManager = teamsManager.getTeamManager();
-    TPlayerManager tPlayerManager = teamsManager.getTPlayerManager();
+    TeamPlayerManager tPlayerManager = teamsManager.getTeamPlayerManager();
 
     teamManager.update(true, true);
     tPlayerManager.update(true, true);

@@ -7,19 +7,19 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import dev._2lstudios.teams.enums.Relation;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
 import dev._2lstudios.teams.managers.TeamsManager;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 import dev._2lstudios.teams.team.Team;
 import dev._2lstudios.teams.team.TeamRelations;
 
 public class AsyncPlayerChatListener implements Listener {
-  private final TPlayerManager tPlayerManager;
+  private final TeamPlayerManager tPlayerManager;
   private final TeamManager teamManager;
 
   public AsyncPlayerChatListener(TeamsManager teamsManager) {
-    this.tPlayerManager = teamsManager.getTPlayerManager();
+    this.tPlayerManager = teamsManager.getTeamPlayerManager();
     this.teamManager = teamsManager.getTeamManager();
   }
 
@@ -27,13 +27,13 @@ public class AsyncPlayerChatListener implements Listener {
   public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
     Player player = event.getPlayer();
     String playerName = player.getName();
-    TPlayer tPlayer = this.tPlayerManager.getPlayer(playerName);
-    String teamName = tPlayer.getTeam();
+    TeamPlayer teamPlayer = this.tPlayerManager.getPlayer(playerName);
+    String teamName = teamPlayer.getTeam();
     if (teamName != null) {
       Team team = this.teamManager.getTeam(teamName);
       if (team.exists()) {
         TeamRelations teamRelations;
-        switch (tPlayer.getChatMode()) {
+        switch (teamPlayer.getChatMode()) {
           case TEAM:
             team.sendMessage(ChatColor.translateAlternateColorCodes('&',
                 "&8[&aTeam&8] &a" + playerName + "&8:&r " + event.getMessage()));

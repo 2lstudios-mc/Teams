@@ -11,26 +11,26 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import dev._2lstudios.teams.tasks.TeleportTask;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 
-public class TPlayerManager {
+public class TeamPlayerManager {
   private final Plugin plugin;
   private final TeamsManager teamsManager;
-  private final Map<String, TPlayer> tPlayerMap;
+  private final Map<String, TeamPlayer> tPlayerMap;
   private final Collection<TeleportTask> teleportTasks;
 
-  TPlayerManager(Plugin plugin, TeamsManager teamsManager) {
+  TeamPlayerManager(Plugin plugin, TeamsManager teamsManager) {
     this.plugin = plugin;
     this.teamsManager = teamsManager;
     this.tPlayerMap = new HashMap<>();
     this.teleportTasks = new HashSet<>();
   }
 
-  public TPlayer getPlayer(String name) {
+  public TeamPlayer getPlayer(String name) {
     if (name != null && !name.trim().isEmpty()) {
-      TPlayer tPlayer;
+      TeamPlayer teamPlayer;
       if (this.tPlayerMap.containsKey(name)) {
-        tPlayer = this.tPlayerMap.get(name);
+        teamPlayer = this.tPlayerMap.get(name);
       } else {
         OfflinePlayer offlinePlayer;
         Server server = this.plugin.getServer();
@@ -41,11 +41,11 @@ public class TPlayerManager {
           offlinePlayer = this.plugin.getServer()
               .getOfflinePlayer(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes()));
         }
-        tPlayer = new TPlayer(this.plugin, this.teamsManager.getTeamManager(), offlinePlayer, name);
-        this.tPlayerMap.put(name, tPlayer);
+        teamPlayer = new TeamPlayer(this.plugin, this.teamsManager.getTeamManager(), offlinePlayer, name);
+        this.tPlayerMap.put(name, teamPlayer);
       }
-      tPlayer.update();
-      return tPlayer;
+      teamPlayer.update();
+      return teamPlayer;
     }
     return null;
   }
@@ -55,13 +55,13 @@ public class TPlayerManager {
   }
 
   public void update(boolean ignoreOnline, boolean sync) {
-    Collection<TPlayer> tPlayerMapValues = this.tPlayerMap.values();
-    for (TPlayer tPlayer : new HashSet<>(tPlayerMapValues)) {
-      if (ignoreOnline || !tPlayer.isOnline()) {
-        if (tPlayer.isChanged())
-          tPlayer.save(sync);
-        if (tPlayer.lastUpdate() > 60000L)
-          tPlayerMapValues.remove(tPlayer);
+    Collection<TeamPlayer> tPlayerMapValues = this.tPlayerMap.values();
+    for (TeamPlayer teamPlayer : new HashSet<>(tPlayerMapValues)) {
+      if (ignoreOnline || !teamPlayer.isOnline()) {
+        if (teamPlayer.isChanged())
+          teamPlayer.save(sync);
+        if (teamPlayer.lastUpdate() > 60000L)
+          tPlayerMapValues.remove(teamPlayer);
       }
     }
   }

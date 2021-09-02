@@ -14,7 +14,7 @@ import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONObject;
 import dev._2lstudios.teams.enums.Relation;
 import dev._2lstudios.teams.enums.Role;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamsManager;
 import dev._2lstudios.teams.utils.JSONUtil;
 import dev._2lstudios.teams.utils.TeamShowBuilder;
@@ -49,7 +49,7 @@ public class Team {
     this.teamHome = new TeamHome();
     this.teamRelations = new TeamRelations(getName());
     this.teamMembers = new TeamMembers();
-    TPlayerManager tPlayerManager = teamsManager.getTPlayerManager();
+    TeamPlayerManager tPlayerManager = teamsManager.getTeamPlayerManager();
     JSONObject jsonObject = JSONUtil.get("%datafolder%/teams/" + getName() + ".json");
     this.teamRelations.load(jsonObject);
     this.teamHome.load(jsonObject);
@@ -83,23 +83,23 @@ public class Team {
     return this.displayName;
   }
 
-  public void addPlayer(TPlayer tPlayer, Role role) {
-    String tPlayerName = tPlayer.getName();
+  public void addPlayer(TeamPlayer teamPlayer, Role role) {
+    String tPlayerName = teamPlayer.getName();
     sendMessage(ChatColor.translateAlternateColorCodes('&', "&b" + tPlayerName + " &ase unio a tu team!"));
-    tPlayer.setTeam(getName());
+    teamPlayer.setTeam(getName());
     this.teamMembers.getMembers().put(tPlayerName, role);
     setChanged(true);
   }
 
-  public void addPlayer(TPlayer tPlayer) {
-    addPlayer(tPlayer, Role.MIEMBRO);
+  public void addPlayer(TeamPlayer teamPlayer) {
+    addPlayer(teamPlayer, Role.MIEMBRO);
   }
 
-  public void removePlayer(TPlayer tPlayer) {
-    String tPlayerName = tPlayer.getName();
-    String team = tPlayer.getTeam();
+  public void removePlayer(TeamPlayer teamPlayer) {
+    String tPlayerName = teamPlayer.getName();
+    String team = teamPlayer.getTeam();
     if (team != null && team.equals(getName()))
-      tPlayer.setTeam(null);
+      teamPlayer.setTeam(null);
     this.teamMembers.getOnline().remove(tPlayerName);
     this.teamMembers.getMembers().remove(tPlayerName);
     setChanged(true);
@@ -164,12 +164,12 @@ public class Team {
 
   public int getKills() {
     Server server = Bukkit.getServer();
-    TPlayerManager tPlayerManager = this.teamsManager.getTPlayerManager();
+    TeamPlayerManager tPlayerManager = this.teamsManager.getTeamPlayerManager();
     int kills = 0;
     for (String memberName : this.teamMembers.getMembers().keySet()) {
-      TPlayer tPlayer = tPlayerManager.getPlayer(memberName);
-      if (tPlayer != null) {
-        UUID uuid = tPlayer.getUUID();
+      TeamPlayer teamPlayer = tPlayerManager.getPlayer(memberName);
+      if (teamPlayer != null) {
+        UUID uuid = teamPlayer.getUUID();
         try {
           kills += Integer.parseInt(PlaceholderAPI.setPlaceholders(server.getPlayer(uuid), "%statistic_player_kills%"));
         } catch (NumberFormatException numberFormatException) {

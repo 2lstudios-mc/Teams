@@ -8,7 +8,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONObject;
 import dev._2lstudios.teams.enums.Role;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 
 public class TeamMembers {
   private final Map<String, Role> members = new HashMap<>();
@@ -45,7 +45,7 @@ public class TeamMembers {
     return toGive;
   }
 
-  public void load(Plugin plugin, TPlayerManager tPlayerManager, JSONObject jsonObject) {
+  public void load(Plugin plugin, TeamPlayerManager tPlayerManager, JSONObject jsonObject) {
     try {
       JSONObject jsonMembers = (JSONObject) jsonObject.getOrDefault("members", new JSONObject());
       for (Object memberObject : jsonMembers.entrySet()) {
@@ -67,7 +67,7 @@ public class TeamMembers {
   }
 
   @Deprecated
-  public void load(TPlayerManager tPlayerManager, FileConfiguration fileConfiguration) {
+  public void load(TeamPlayerManager tPlayerManager, FileConfiguration fileConfiguration) {
     if (fileConfiguration.contains("members")) {
       Collection<String> yamlMembers = new HashSet<>(fileConfiguration.getStringList("members"));
       for (String member : yamlMembers)

@@ -6,24 +6,24 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import dev._2lstudios.teams.enums.Role;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 import dev._2lstudios.teams.team.Team;
 
 class TeamsLeaderCommand {
-  TeamsLeaderCommand(Plugin plugin, CommandSender sender, TeamManager teamManager, TPlayerManager tPlayerManager,
+  TeamsLeaderCommand(Plugin plugin, CommandSender sender, TeamManager teamManager, TeamPlayerManager tPlayerManager,
       String label, String[] args) {
     if (args.length > 1) {
       String senderName = sender.getName();
-      TPlayer tPlayer = tPlayerManager.getPlayer(senderName);
-      if (tPlayer != null) {
-        String teamName = tPlayer.getTeam();
+      TeamPlayer teamPlayer = tPlayerManager.getPlayer(senderName);
+      if (teamPlayer != null) {
+        String teamName = teamPlayer.getTeam();
         Team team = teamManager.getTeam(teamName);
         if (team != null) {
           if (team.getRole(senderName) == Role.LIDER) {
-            TPlayer tPlayer1 = tPlayerManager.getPlayer(args[1]);
-            String teamName1 = tPlayer1.getTeam();
+            TeamPlayer teamPlayer1 = tPlayerManager.getPlayer(args[1]);
+            String teamName1 = teamPlayer1.getTeam();
             if (teamName1 != null && teamName1.equals(teamName)) {
               Map<String, Role> members = team.getMembers();
               Player player = plugin.getServer().getPlayer(args[1]);

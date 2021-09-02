@@ -3,16 +3,16 @@ package dev._2lstudios.teams.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import dev._2lstudios.teams.enums.Role;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 import dev._2lstudios.teams.team.Team;
 
 class TeamsDescriptionCommand {
-  TeamsDescriptionCommand(TPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender, String[] args) {
+  TeamsDescriptionCommand(TeamPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender, String[] args) {
     String senderName = sender.getName();
-    TPlayer tPlayer = tPlayerManager.getPlayer(senderName);
-    Team team = teamManager.getTeam(tPlayer.getTeam());
+    TeamPlayer teamPlayer = tPlayerManager.getPlayer(senderName);
+    Team team = teamManager.getTeam(teamPlayer.getTeam());
     if (team != null) {
       Role role = team.getRole(senderName);
       if (role == Role.LIDER || role == Role.COLIDER) {

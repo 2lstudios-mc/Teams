@@ -4,18 +4,18 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 import dev._2lstudios.teams.team.Team;
 
 class TeamsTellLocationCommand {
-  TeamsTellLocationCommand(TPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender) {
+  TeamsTellLocationCommand(TeamPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender) {
     if (sender instanceof Player) {
       String senderName = sender.getName();
       Player player = (Player) sender;
-      TPlayer tPlayer = tPlayerManager.getPlayer(senderName);
-      Team team = teamManager.getTeam(tPlayer.getTeam());
+      TeamPlayer teamPlayer = tPlayerManager.getPlayer(senderName);
+      Team team = teamManager.getTeam(teamPlayer.getTeam());
       if (team != null) {
         Location location = player.getLocation();
         team.sendMessage(ChatColor.translateAlternateColorCodes('&',

@@ -5,9 +5,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import dev._2lstudios.teams.enums.Role;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 import dev._2lstudios.teams.team.Team;
 import dev._2lstudios.worldsentinel.WorldSentinel;
 import dev._2lstudios.worldsentinel.region.Region;
@@ -23,7 +23,7 @@ class TeamsSethomeCommand {
     return true;
   }
 
-  TeamsSethomeCommand(PluginManager pluginManager, TPlayerManager tPlayerManager, TeamManager teamManager,
+  TeamsSethomeCommand(PluginManager pluginManager, TeamPlayerManager tPlayerManager, TeamManager teamManager,
       CommandSender sender, boolean homesEnabled) {
     if (sender instanceof Player) {
       Player player = (Player) sender;
@@ -31,8 +31,8 @@ class TeamsSethomeCommand {
         sender.sendMessage(ChatColor.RED + "Las homes estan desactivadas!");
       } else {
         String senderName = sender.getName();
-        TPlayer tPlayer = tPlayerManager.getPlayer(senderName);
-        Team team = teamManager.getTeam(tPlayer.getTeam());
+        TeamPlayer teamPlayer = tPlayerManager.getPlayer(senderName);
+        Team team = teamManager.getTeam(teamPlayer.getTeam());
         if (team != null) {
           Role tPlayerRole = team.getRole(senderName);
           if (tPlayerRole.getPower() > Role.MOD.getPower()) {

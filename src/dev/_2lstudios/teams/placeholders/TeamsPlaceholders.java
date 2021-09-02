@@ -5,10 +5,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import dev._2lstudios.teams.enums.Relation;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
 import dev._2lstudios.teams.managers.TeamsManager;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 import dev._2lstudios.teams.team.Team;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 
@@ -36,11 +36,11 @@ public class TeamsPlaceholders extends PlaceholderExpansion {
   public String onPlaceholderRequest(Player player, String identifier) {
     if (player != null && !identifier.isEmpty()) {
       if (identifier.equalsIgnoreCase("team")) {
-        TPlayerManager tPlayerManager = this.teamsManager.getTPlayerManager();
-        if (tPlayerManager != null) {
-          TPlayer tPlayer = tPlayerManager.getPlayer(player.getName());
-          if (tPlayer != null) {
-            String teamName = tPlayer.getTeam();
+        TeamPlayerManager teamPlayerManager = this.teamsManager.getTeamPlayerManager();
+        if (teamPlayerManager != null) {
+          TeamPlayer teamPlayer = teamPlayerManager.getPlayer(player.getName());
+          if (teamPlayer != null) {
+            String teamName = teamPlayer.getTeam();
             Team team = this.teamsManager.getTeamManager().getTeam(teamName);
             if (team != null && team.exists())
               return team.getDisplayName();
@@ -48,16 +48,16 @@ public class TeamsPlaceholders extends PlaceholderExpansion {
           }
         }
       } else if (identifier.startsWith("color_")) {
-        TPlayerManager tPlayerManager = this.teamsManager.getTPlayerManager();
+        TeamPlayerManager tPlayerManager = this.teamsManager.getTeamPlayerManager();
         String playerName = player.getName();
-        TPlayer tPlayer = tPlayerManager.getPlayer(playerName);
-        String teamName = tPlayer.getTeam();
+        TeamPlayer teamPlayer = tPlayerManager.getPlayer(playerName);
+        String teamName = teamPlayer.getTeam();
         if (teamName != null) {
           String[] identifierArray = identifier.split("_");
           if (identifierArray.length > 1) {
-            TPlayer tPlayer1 = tPlayerManager.getPlayer(identifierArray[1]);
-            if (tPlayer1 != null) {
-              String targetTeamName = tPlayer1.getTeam();
+            TeamPlayer teamPlayer1 = tPlayerManager.getPlayer(identifierArray[1]);
+            if (teamPlayer1 != null) {
+              String targetTeamName = teamPlayer1.getTeam();
               if (targetTeamName != null) {
                 TeamManager teamManager = this.teamsManager.getTeamManager();
                 Team team = teamManager.getTeam(teamName);

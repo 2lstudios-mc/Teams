@@ -3,26 +3,26 @@ package dev._2lstudios.teams.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import dev._2lstudios.teams.enums.ChatMode;
-import dev._2lstudios.teams.managers.TPlayerManager;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
+import dev._2lstudios.teams.team.TeamPlayer;
 
 class TeamsChatCommand {
-  TeamsChatCommand(TPlayerManager tPlayerManager, CommandSender sender) {
+  TeamsChatCommand(TeamPlayerManager tPlayerManager, CommandSender sender) {
     String senderName = sender.getName();
-    TPlayer tPlayer = tPlayerManager.getPlayer(senderName);
-    String teamName = tPlayer.getTeam();
+    TeamPlayer teamPlayer = tPlayerManager.getPlayer(senderName);
+    String teamName = teamPlayer.getTeam();
     if (teamName != null) {
-      switch (tPlayer.getChatMode()) {
+      switch (teamPlayer.getChatMode()) {
         case ALLY:
-          tPlayer.setChatMode(ChatMode.ALLY);
+          teamPlayer.setChatMode(ChatMode.ALLY);
           sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aEstableciste el chat en modo &bALLY&a!"));
           break;
         case NORMAL:
-          tPlayer.setChatMode(ChatMode.NORMAL);
+          teamPlayer.setChatMode(ChatMode.NORMAL);
           sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aEstableciste el chat en modo &bNORMAL&a!"));
           break;
         case TEAM:
-          tPlayer.setChatMode(ChatMode.TEAM);
+          teamPlayer.setChatMode(ChatMode.TEAM);
           sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aEstableciste el chat en modo &bTEAM&a!"));
           break;
       }

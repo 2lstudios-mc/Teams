@@ -7,25 +7,25 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamsManager;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 
 public class PlayerMoveListener implements Listener {
-  private final TPlayerManager tPlayerManager;
+  private final TeamPlayerManager tPlayerManager;
 
   public PlayerMoveListener(TeamsManager teamsManager) {
-    this.tPlayerManager = teamsManager.getTPlayerManager();
+    this.tPlayerManager = teamsManager.getTeamPlayerManager();
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPlayerMove(PlayerMoveEvent event) {
     Player player = event.getPlayer();
-    TPlayer tPlayer = this.tPlayerManager.getPlayer(player.getName());
+    TeamPlayer teamPlayer = this.tPlayerManager.getPlayer(player.getName());
     Location from = event.getFrom();
     Location to = event.getTo();
-    if (tPlayer != null && tPlayer.getTeleportTask() != null && from.distance(to) > 0.1D) {
-      tPlayer.setTeleportTask(null);
+    if (teamPlayer != null && teamPlayer.getTeleportTask() != null && from.distance(to) > 0.1D) {
+      teamPlayer.setTeleportTask(null);
       player.sendMessage(
           ChatColor.translateAlternateColorCodes('&', "&cTeletransporte pendiente cancelado por movimiento!"));
     }

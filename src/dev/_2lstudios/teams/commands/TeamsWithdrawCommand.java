@@ -6,20 +6,20 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import dev._2lstudios.teams.enums.Role;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 import dev._2lstudios.teams.team.Team;
 
 class TeamsWithdrawCommand {
-  TeamsWithdrawCommand(Economy economy, TPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender,
+  TeamsWithdrawCommand(Economy economy, TeamPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender,
       String[] args) {
     if (sender instanceof Player) {
       Player player = (Player) sender;
       if (args.length > 1) {
         String senderName = sender.getName();
-        TPlayer tPlayer = tPlayerManager.getPlayer(senderName);
-        Team team = teamManager.getTeam(tPlayer.getTeam());
+        TeamPlayer teamPlayer = tPlayerManager.getPlayer(senderName);
+        Team team = teamManager.getTeam(teamPlayer.getTeam());
         if (team != null) {
           Role role = team.getRole(senderName);
           if (role == Role.LIDER || role == Role.COLIDER) {

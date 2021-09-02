@@ -2,24 +2,24 @@ package dev._2lstudios.teams.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 import dev._2lstudios.teams.team.Team;
 
 class TeamsJoinCommand {
-  TeamsJoinCommand(TPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender, String label,
+  TeamsJoinCommand(TeamPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender, String label,
       String[] args) {
     if (args.length > 1) {
       String senderName = sender.getName();
-      TPlayer tPlayer = tPlayerManager.getPlayer(senderName);
-      String currentTeamName = tPlayer.getTeam();
+      TeamPlayer teamPlayer = tPlayerManager.getPlayer(senderName);
+      String currentTeamName = teamPlayer.getTeam();
       Team currentTeam = teamManager.getTeam(currentTeamName);
       if (currentTeam == null || !currentTeam.exists()) {
         String targetTeamName = args[1].toLowerCase();
         Team targetTeam = teamManager.getTeam(targetTeamName);
         if (targetTeam != null && targetTeam.isInvited(senderName)) {
-          targetTeam.addPlayer(tPlayer);
+          targetTeam.addPlayer(teamPlayer);
           targetTeam.removeInvited(senderName);
           targetTeam.getTeamMembers().getOnline().add(senderName);
           sender.sendMessage(ChatColor.translateAlternateColorCodes('&',

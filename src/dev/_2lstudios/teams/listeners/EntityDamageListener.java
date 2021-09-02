@@ -7,15 +7,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamsManager;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 
 public class EntityDamageListener implements Listener {
-  private final TPlayerManager tPlayerManager;
+  private final TeamPlayerManager tPlayerManager;
 
   public EntityDamageListener(TeamsManager teamsManager) {
-    this.tPlayerManager = teamsManager.getTPlayerManager();
+    this.tPlayerManager = teamsManager.getTeamPlayerManager();
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -24,9 +24,9 @@ public class EntityDamageListener implements Listener {
     if (!(entity instanceof Player))
       return;
     Player player = (Player) entity;
-    TPlayer tPlayer = this.tPlayerManager.getPlayer(player.getName());
-    if (tPlayer != null && tPlayer.getTeleportTask() != null) {
-      tPlayer.setTeleportTask(null);
+    TeamPlayer teamPlayer = this.tPlayerManager.getPlayer(player.getName());
+    if (teamPlayer != null && teamPlayer.getTeleportTask() != null) {
+      teamPlayer.setTeleportTask(null);
       player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cTeletransporte pendiente cancelado por daño!"));
     }
   }

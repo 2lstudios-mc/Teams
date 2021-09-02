@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 import dev._2lstudios.teams.team.Team;
 import dev._2lstudios.teams.utils.ConfigurationUtil;
 import dev._2lstudios.teams.utils.JSONUtil;
@@ -65,7 +65,7 @@ public class TeamManager {
     if (removeMap)
       this.teamMap.remove(name);
     for (String teamPlayerName : new HashSet<>(team.getMembers().keySet()))
-      team.removePlayer(this.teamsManager.getTPlayerManager().getPlayer(teamPlayerName));
+      team.removePlayer(this.teamsManager.getTeamPlayerManager().getPlayer(teamPlayerName));
   }
 
   public boolean renameTeam(String oldTeamName, String newTeamName, boolean sync) {
@@ -74,8 +74,8 @@ public class TeamManager {
       team.setName(newTeamName);
       String name = team.getName();
       for (String memberName : team.getMembers().keySet()) {
-        TPlayer tPlayer = this.teamsManager.getTPlayerManager().getPlayer(memberName);
-        tPlayer.setTeam(name);
+        TeamPlayer teamPlayer = this.teamsManager.getTeamPlayerManager().getPlayer(memberName);
+        teamPlayer.setTeam(name);
       }
       this.teamMap.remove(oldTeamName);
       this.teamMap.put(name, team);

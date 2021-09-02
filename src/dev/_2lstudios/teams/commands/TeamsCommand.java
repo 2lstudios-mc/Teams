@@ -8,7 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
 import dev._2lstudios.teams.managers.TeamsManager;
 
@@ -17,7 +17,7 @@ public class TeamsCommand implements CommandExecutor {
   private final Server server;
   private final Economy economy;
   private final TeamManager teamManager;
-  private final TPlayerManager tPlayerManager;
+  private final TeamPlayerManager tPlayerManager;
   private final boolean homesEnabled;
 
   public TeamsCommand(Plugin plugin, Economy economy, TeamsManager teamsManager, boolean homesEnabled) {
@@ -25,7 +25,7 @@ public class TeamsCommand implements CommandExecutor {
     this.server = plugin.getServer();
     this.economy = economy;
     this.teamManager = teamsManager.getTeamManager();
-    this.tPlayerManager = teamsManager.getTPlayerManager();
+    this.tPlayerManager = teamsManager.getTeamPlayerManager();
     this.homesEnabled = homesEnabled;
   }
 

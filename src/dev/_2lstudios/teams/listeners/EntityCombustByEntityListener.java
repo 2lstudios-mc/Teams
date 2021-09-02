@@ -6,20 +6,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
 import dev._2lstudios.teams.managers.TeamsManager;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 import dev._2lstudios.teams.team.Team;
 
 public class EntityCombustByEntityListener implements Listener {
   private final TeamManager teamManager;
 
-  private final TPlayerManager tPlayerManager;
+  private final TeamPlayerManager tPlayerManager;
 
   public EntityCombustByEntityListener(TeamsManager teamsManager) {
     this.teamManager = teamsManager.getTeamManager();
-    this.tPlayerManager = teamsManager.getTPlayerManager();
+    this.tPlayerManager = teamsManager.getTeamPlayerManager();
   }
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
@@ -29,12 +29,12 @@ public class EntityCombustByEntityListener implements Listener {
       Entity combuster = event.getCombuster();
       if (combuster instanceof Player) {
         Player damager = (Player) combuster;
-        TPlayer tPlayer = this.tPlayerManager.getPlayer(entity.getName());
-        TPlayer tPlayer1 = this.tPlayerManager.getPlayer(damager.getName());
-        if (tPlayer != null && tPlayer1 != null) {
-          String teamName = tPlayer.getTeam();
+        TeamPlayer teamPlayer = this.tPlayerManager.getPlayer(entity.getName());
+        TeamPlayer teamPlayer1 = this.tPlayerManager.getPlayer(damager.getName());
+        if (teamPlayer != null && teamPlayer1 != null) {
+          String teamName = teamPlayer.getTeam();
           Team team = this.teamManager.getTeam(teamName);
-          if (team != null && !team.isPvp() && teamName.equals(tPlayer1.getTeam()))
+          if (team != null && !team.isPvp() && teamName.equals(teamPlayer1.getTeam()))
             event.setCancelled(true);
         }
       }

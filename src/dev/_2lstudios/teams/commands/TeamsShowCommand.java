@@ -2,26 +2,26 @@ package dev._2lstudios.teams.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 import dev._2lstudios.teams.team.Team;
 
 class TeamsShowCommand {
-  TeamsShowCommand(TPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender, String[] args) {
+  TeamsShowCommand(TeamPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender, String[] args) {
     Team team = null;
     if (args.length < 2) {
-      TPlayer tPlayer = tPlayerManager.getPlayer(sender.getName());
-      if (tPlayer != null) {
-        team = teamManager.getTeam(tPlayer.getTeam());
+      TeamPlayer teamPlayer = tPlayerManager.getPlayer(sender.getName());
+      if (teamPlayer != null) {
+        team = teamManager.getTeam(teamPlayer.getTeam());
       } else {
         team = null;
       }
     } else {
       team = teamManager.getTeam(args[1].toLowerCase());
       if (team == null || !team.exists()) {
-        TPlayer tPlayer = tPlayerManager.getPlayer(args[1]);
-        team = teamManager.getTeam(tPlayer.getTeam());
+        TeamPlayer teamPlayer = tPlayerManager.getPlayer(args[1]);
+        team = teamManager.getTeam(teamPlayer.getTeam());
       }
     }
     if (team != null && team.exists()) {

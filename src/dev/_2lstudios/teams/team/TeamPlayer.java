@@ -10,7 +10,7 @@ import dev._2lstudios.teams.managers.TeamManager;
 import dev._2lstudios.teams.tasks.TeleportTask;
 import dev._2lstudios.teams.utils.JSONUtil;
 
-public class TPlayer {
+public class TeamPlayer {
   private TeleportTask teleportTask;
   
   private final UUID uuid;
@@ -27,7 +27,7 @@ public class TPlayer {
   
   private boolean online;
   
-  public TPlayer(Plugin plugin, TeamManager teamManager, OfflinePlayer offlinePlayer, String name) {
+  public TeamPlayer(Plugin plugin, TeamManager teamManager, OfflinePlayer offlinePlayer, String name) {
     this.teleportTask = null;
     this.uuid = offlinePlayer.getUniqueId();
     this.name = name;

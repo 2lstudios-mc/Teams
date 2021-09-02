@@ -6,22 +6,22 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
 import dev._2lstudios.teams.tasks.TeleportTask;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 import dev._2lstudios.teams.team.Team;
 
 class TeamsHomeCommand {
-  TeamsHomeCommand(Server server, TPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender,
+  TeamsHomeCommand(Server server, TeamPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender,
       boolean homesEnabled) {
     if (sender instanceof Player) {
       Player player = (Player) sender;
       if (!homesEnabled) {
         sender.sendMessage(ChatColor.RED + "Las homes estan desactivadas!");
       } else {
-        TPlayer tPlayer = tPlayerManager.getPlayer(sender.getName());
-        Team team = teamManager.getTeam(tPlayer.getTeam());
+        TeamPlayer teamPlayer = tPlayerManager.getPlayer(sender.getName());
+        Team team = teamManager.getTeam(teamPlayer.getTeam());
         if (team != null) {
           Location home = team.getTeamHome().getHome(server);
           if (home != null) {
@@ -31,7 +31,7 @@ class TeamsHomeCommand {
             } else {
               seconds = 1;
             }
-            tPlayer.setTeleportTask(new TeleportTask(tPlayerManager, tPlayer, player, home, seconds));
+            teamPlayer.setTeleportTask(new TeleportTask(tPlayerManager, teamPlayer, player, home, seconds));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
                 String.format("&aEstas siendo teletransportado a la &bHome&a! &7(%s segundos)",
                     new Object[] { Integer.valueOf(seconds) })));

@@ -3,11 +3,14 @@ package dev._2lstudios.teams.tasks;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import dev._2lstudios.teams.managers.TPlayerManager;
-import dev._2lstudios.teams.team.TPlayer;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import dev._2lstudios.teams.managers.TeamPlayerManager;
+import dev._2lstudios.teams.team.TeamPlayer;
 
 public class TeleportTask {
-  private final TPlayer tPlayer;
+  private final TeamPlayer teamPlayer;
   
   private final Player player;
   
@@ -15,8 +18,8 @@ public class TeleportTask {
   
   private int time;
   
-  public TeleportTask(TPlayerManager tPlayerManager, TPlayer tPlayer, Player player, Location location, int time) {
-    this.tPlayer = tPlayer;
+  public TeleportTask(TeamPlayerManager tPlayerManager, TeamPlayer teamPlayer, Player player, Location location, int time) {
+    this.teamPlayer = teamPlayer;
     this.player = player;
     this.location = location;
     this.time = time;
@@ -25,12 +28,15 @@ public class TeleportTask {
   
   public boolean update() {
     this.time--;
-    if (this.tPlayer.getTeleportTask() != this)
+    if (this.teamPlayer.getTeleportTask() != this)
       return true; 
     if (this.time < 1) {
       if (this.player != null && this.player.isOnline()) {
+        this.player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 0));
+        this.player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40, 0));
+        this.player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
         this.player.teleport(this.location);
-        this.tPlayer.setTeleportTask(null);
+        this.teamPlayer.setTeleportTask(null);
         this.player.sendMessage(ChatColor.GREEN + "Fuiste teletransportado correctamente!");
       } 
       return true;

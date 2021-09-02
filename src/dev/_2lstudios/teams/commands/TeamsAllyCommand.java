@@ -4,20 +4,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import dev._2lstudios.teams.enums.Relation;
 import dev._2lstudios.teams.enums.Role;
-import dev._2lstudios.teams.managers.TPlayerManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
-import dev._2lstudios.teams.team.TPlayer;
+import dev._2lstudios.teams.team.TeamPlayer;
 import dev._2lstudios.teams.team.Team;
 import dev._2lstudios.teams.team.TeamRelations;
 
 public class TeamsAllyCommand {
-  TeamsAllyCommand(TPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender, String label,
+  TeamsAllyCommand(TeamPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender, String label,
       String[] args) {
     if (args.length > 1) {
       String senderName = sender.getName();
-      TPlayer tPlayer = tPlayerManager.getPlayer(senderName);
-      if (tPlayer != null) {
-        String teamName = tPlayer.getTeam();
+      TeamPlayer teamPlayer = tPlayerManager.getPlayer(senderName);
+      if (teamPlayer != null) {
+        String teamName = teamPlayer.getTeam();
         Team team = teamManager.getTeam(teamName);
         if (team != null) {
           Role role = team.getRole(senderName);
