@@ -1,34 +1,26 @@
 package dev._2lstudios.teams.team;
 
 import java.util.UUID;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONObject;
+
 import dev._2lstudios.teams.enums.ChatMode;
 import dev._2lstudios.teams.enums.Role;
 import dev._2lstudios.teams.managers.TeamManager;
-import dev._2lstudios.teams.tasks.TeleportTask;
 import dev._2lstudios.teams.utils.JSONUtil;
 
 public class TeamPlayer {
-  private TeleportTask teleportTask;
-  
   private final UUID uuid;
-  
   private final String name;
-  
   private ChatMode chatMode;
-  
   private String team;
-  
   private long lastUpdate;
-  
   private boolean changed;
-  
   private boolean online;
   
   public TeamPlayer(Plugin plugin, TeamManager teamManager, OfflinePlayer offlinePlayer, String name) {
-    this.teleportTask = null;
     this.uuid = offlinePlayer.getUniqueId();
     this.name = name;
     this.chatMode = ChatMode.NORMAL;
@@ -80,14 +72,6 @@ public class TeamPlayer {
   
   public String getTeam() {
     return this.team;
-  }
-  
-  public TeleportTask getTeleportTask() {
-    return this.teleportTask;
-  }
-  
-  public void setTeleportTask(TeleportTask teleportTask) {
-    this.teleportTask = teleportTask;
   }
   
   public boolean isChanged() {

@@ -7,27 +7,28 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import dev._2lstudios.teams.managers.TeamPlayerManager;
+
 import dev._2lstudios.teams.managers.TeamsManager;
-import dev._2lstudios.teams.team.TeamPlayer;
+import dev._2lstudios.teams.teleport.TeleportSystem;
 
 public class EntityDamageListener implements Listener {
-  private final TeamPlayerManager tPlayerManager;
+  private final TeleportSystem teleportSystem;
 
-  public EntityDamageListener(TeamsManager teamsManager) {
-    this.tPlayerManager = teamsManager.getTeamPlayerManager();
+  public EntityDamageListener(final TeamsManager teamsManager) {
+    this.teleportSystem = teamsManager.getTeleportSystem();
   }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  public void onEntityDamage(EntityDamageEvent event) {
-    Entity entity = event.getEntity();
-    if (!(entity instanceof Player))
-      return;
-    Player player = (Player) entity;
-    TeamPlayer teamPlayer = this.tPlayerManager.getPlayer(player.getName());
-    if (teamPlayer != null && teamPlayer.getTeleportTask() != null) {
-      teamPlayer.setTeleportTask(null);
-      player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cTeletransporte pendiente cancelado por daño!"));
+  public void onEntityDamage(final EntityDamageEvent event) {
+    final Entity entity = event.getEntity();
+
+    if (entity instanceof Player) {
+      final Player player = (Player) entity;
+
+      if (teleportSystem.remove(player) != null) {
+        player
+            .sendMessage(ChatColor.translateAlternateColorCodes('&', "&cTeletransporte pendiente cancelado por daño!"));
+      }
     }
   }
 }

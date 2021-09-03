@@ -92,7 +92,7 @@ public class Teams extends JavaPlugin {
       tPlayerManager.update(false, false);
     }, 1200L, 1200L);
 
-    scheduler.runTaskTimer(this, () -> tPlayerManager.updateTeleports(), 20L, 20L);
+    scheduler.runTaskTimer(this, teamsManager.getTeleportSystem(), 20L, 20L);
   }
 
   public void onDisable() {

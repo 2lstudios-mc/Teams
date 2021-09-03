@@ -11,13 +11,15 @@ import org.bukkit.plugin.PluginManager;
 import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
 import dev._2lstudios.teams.managers.TeamsManager;
+import dev._2lstudios.teams.teleport.TeleportSystem;
 
 public class TeamsCommand implements CommandExecutor {
   private final Plugin plugin;
   private final Server server;
   private final Economy economy;
   private final TeamManager teamManager;
-  private final TeamPlayerManager tPlayerManager;
+  private final TeamPlayerManager teamPlayerManager;
+  private final TeleportSystem teleportSystem;
   private final boolean homesEnabled;
 
   public TeamsCommand(Plugin plugin, Economy economy, TeamsManager teamsManager, boolean homesEnabled) {
@@ -25,7 +27,8 @@ public class TeamsCommand implements CommandExecutor {
     this.server = plugin.getServer();
     this.economy = economy;
     this.teamManager = teamsManager.getTeamManager();
-    this.tPlayerManager = teamsManager.getTeamPlayerManager();
+    this.teamPlayerManager = teamsManager.getTeamPlayerManager();
+    this.teleportSystem = teamsManager.getTeleportSystem();
     this.homesEnabled = homesEnabled;
   }
 
@@ -41,51 +44,51 @@ public class TeamsCommand implements CommandExecutor {
         if (args[0].equals("help")) {
           new TeamsHelpCommand(sender, label);
         } else if (args[0].equals("leader")) {
-          new TeamsLeaderCommand(plugin, sender, teamManager, tPlayerManager, label, args);
+          new TeamsLeaderCommand(plugin, sender, teamManager, teamPlayerManager, label, args);
         } else if (args[0].equals("claim")) {
           new TeamsClaimCommand(pluginManager, sender);
         } else if (args[0].equals("chat") || args[0].equals("c")) {
-          new TeamsChatCommand(tPlayerManager, sender);
+          new TeamsChatCommand(teamPlayerManager, sender);
         } else if (args[0].equals("tl")) {
-          new TeamsTellLocationCommand(tPlayerManager, teamManager, sender);
+          new TeamsTellLocationCommand(teamPlayerManager, teamManager, sender);
         } else if (args[0].equals("list")) {
           new TeamsListCommand(teamManager, sender, args);
         } else if (args[0].equals("show") || args[0].equals("who")) {
-          new TeamsShowCommand(tPlayerManager, teamManager, sender, args);
+          new TeamsShowCommand(teamPlayerManager, teamManager, sender, args);
         } else if (args[0].equals("create")) {
-          new TeamsCreateCommand(tPlayerManager, teamManager, sender, label, args);
+          new TeamsCreateCommand(teamPlayerManager, teamManager, sender, label, args);
         } else if (args[0].equals("delete")) {
-          new TeamsDeleteCommand(tPlayerManager, teamManager, sender);
+          new TeamsDeleteCommand(teamPlayerManager, teamManager, sender);
         } else if (args[0].equals("pvp")) {
-          new TeamsPvpCommand(tPlayerManager, teamManager, sender);
+          new TeamsPvpCommand(teamPlayerManager, teamManager, sender);
         } else if (args[0].equals("invite")) {
-          new TeamsInviteCommand(server, tPlayerManager, teamManager, sender, label, args);
+          new TeamsInviteCommand(server, teamPlayerManager, teamManager, sender, label, args);
         } else if (args[0].equals("deinvite")) {
-          new TeamsDeinviteCommand(server, tPlayerManager, teamManager, sender, label, args);
+          new TeamsDeinviteCommand(server, teamPlayerManager, teamManager, sender, label, args);
         } else if (args[0].equals("join")) {
-          new TeamsJoinCommand(tPlayerManager, teamManager, sender, label, args);
+          new TeamsJoinCommand(teamPlayerManager, teamManager, sender, label, args);
         } else if (args[0].equals("leave")) {
-          new TeamsLeaveCommand(tPlayerManager, teamManager, sender);
+          new TeamsLeaveCommand(teamPlayerManager, teamManager, sender);
         } else if (args[0].equals("kick")) {
-          new TeamsKickCommand(server, tPlayerManager, teamManager, sender, label, args);
+          new TeamsKickCommand(server, teamPlayerManager, teamManager, sender, label, args);
         } else if (args[0].equals("sethome")) {
-          new TeamsSethomeCommand(pluginManager, tPlayerManager, teamManager, sender, homesEnabled);
+          new TeamsSethomeCommand(pluginManager, teamPlayerManager, teamManager, sender, homesEnabled);
         } else if (args[0].equals("home")) {
-          new TeamsHomeCommand(server, tPlayerManager, teamManager, sender, homesEnabled);
+          new TeamsHomeCommand(server, teamPlayerManager, teamManager, teleportSystem, sender, homesEnabled);
         } else if (args[0].equals("promote")) {
-          new TeamsPromoteCommand(server, tPlayerManager, teamManager, sender, args);
+          new TeamsPromoteCommand(server, teamPlayerManager, teamManager, sender, args);
         } else if (args[0].equals("demote")) {
-          new TeamsDemoteCommand(server, tPlayerManager, teamManager, sender, args);
+          new TeamsDemoteCommand(server, teamPlayerManager, teamManager, sender, args);
         } else if (args[0].equals("deposit") || args[0].equals("d")) {
-          new TeamsDepositCommand(economy, tPlayerManager, teamManager, sender, args);
+          new TeamsDepositCommand(economy, teamPlayerManager, teamManager, sender, args);
         } else if (args[0].equals("withdraw") || args[0].equals("w")) {
-          new TeamsWithdrawCommand(economy, tPlayerManager, teamManager, sender, args);
+          new TeamsWithdrawCommand(economy, teamPlayerManager, teamManager, sender, args);
         } else if (args[0].equals("description") || args[0].equals("desc")) {
-          new TeamsDescriptionCommand(tPlayerManager, teamManager, sender, args);
+          new TeamsDescriptionCommand(teamPlayerManager, teamManager, sender, args);
         } else if (args[0].equals("ally")) {
-          new TeamsAllyCommand(tPlayerManager, teamManager, sender, label, args);
+          new TeamsAllyCommand(teamPlayerManager, teamManager, sender, label, args);
         } else if (args[0].equals("rename")) {
-          new TeamsRenameCommand(tPlayerManager, teamManager, sender, label, args);
+          new TeamsRenameCommand(teamPlayerManager, teamManager, sender, label, args);
         } else {
           sender.sendMessage(
               ChatColor.RED + "Comando desconocido. Usa /" + label + " help para ver una lista de comandos!");

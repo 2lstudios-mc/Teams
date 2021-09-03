@@ -8,12 +8,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
-import dev._2lstudios.teams.tasks.TeleportTask;
 import dev._2lstudios.teams.team.TeamPlayer;
+import dev._2lstudios.teams.teleport.Teleport;
+import dev._2lstudios.teams.teleport.TeleportSystem;
 import dev._2lstudios.teams.team.Team;
 
 class TeamsHomeCommand {
-  TeamsHomeCommand(Server server, TeamPlayerManager tPlayerManager, TeamManager teamManager, CommandSender sender,
+  TeamsHomeCommand(Server server, TeamPlayerManager tPlayerManager, TeamManager teamManager, TeleportSystem teleportSystem, CommandSender sender,
       boolean homesEnabled) {
     if (sender instanceof Player) {
       Player player = (Player) sender;
@@ -31,7 +32,7 @@ class TeamsHomeCommand {
             } else {
               seconds = 1;
             }
-            teamPlayer.setTeleportTask(new TeleportTask(tPlayerManager, teamPlayer, player, home, seconds));
+            teleportSystem.put(player.getUniqueId(), new Teleport(home, player, seconds));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
                 String.format("&aEstas siendo teletransportado a la &bHome&a! &7(%s segundos)",
                     new Object[] { Integer.valueOf(seconds) })));
