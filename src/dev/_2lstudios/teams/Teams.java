@@ -41,10 +41,10 @@ public class Teams extends JavaPlugin {
     BukkitScheduler scheduler = server.getScheduler();
     PluginManager pluginManager = server.getPluginManager();
     ConfigurationUtil configurationUtil = new ConfigurationUtil(this);
+    JSONUtil jsonUtil = new JSONUtil(getLogger(), getDataFolder().toString());
 
     setupConfigurations(configurationUtil);
-    JSONUtil.initialize(this, getDataFolder().toString());
-    teamsManager = new TeamsManager(this, configurationUtil);
+    teamsManager = new TeamsManager(jsonUtil, this, configurationUtil);
 
     TeamManager teamManager = teamsManager.getTeamManager();
     TeamPlayerManager tPlayerManager = teamsManager.getTeamPlayerManager();
@@ -76,8 +76,8 @@ public class Teams extends JavaPlugin {
     }
 
     scheduler.runTaskTimerAsynchronously(this, () -> {
-      teamManager.update(false, false);
-      tPlayerManager.update(false, false);
+      teamManager.save(false);
+      tPlayerManager.save(false);
     }, 1200L, 1200L);
 
     scheduler.runTaskTimer(this, teamsManager.getTeleportSystem(), 20L, 20L);
@@ -87,8 +87,8 @@ public class Teams extends JavaPlugin {
     TeamManager teamManager = teamsManager.getTeamManager();
     TeamPlayerManager tPlayerManager = teamsManager.getTeamPlayerManager();
 
-    teamManager.update(true, true);
-    tPlayerManager.update(true, true);
+    teamManager.save(true);
+    tPlayerManager.save(true);
 
     if (teamsPlaceholders != null)
       teamsPlaceholders.unregister();

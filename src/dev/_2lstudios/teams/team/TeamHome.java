@@ -2,7 +2,6 @@ package dev._2lstudios.teams.team;
 
 import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.util.Vector;
 import org.json.simple.JSONObject;
 
@@ -26,7 +25,7 @@ public class TeamHome {
     return null;
   }
   
-  public void load(JSONObject jsonObject) {
+  public void deserialize(JSONObject jsonObject) {
     JSONObject homeObject = (JSONObject)jsonObject.getOrDefault("home", new JSONObject());
     double x = Double.parseDouble(homeObject.getOrDefault("x", Integer.valueOf(0)).toString());
     double y = Double.parseDouble(homeObject.getOrDefault("y", Integer.valueOf(0)).toString());
@@ -34,23 +33,15 @@ public class TeamHome {
     this.world = (String)homeObject.getOrDefault("world", null);
     this.vector = new Vector(x, y, z);
   }
-  
-  @Deprecated
-  public void load(FileConfiguration fileConfiguration) {
-    this.world = fileConfiguration.getString("home.world", null);
-    if (fileConfiguration.contains("home.vector")) {
-      this.vector = fileConfiguration.getVector("home.vector");
-    } else {
-      this.vector = new Vector(0, 0, 0);
-    } 
-  }
-  
-  public void save(JSONObject jsonObject) {
-    JSONObject homeObject = new JSONObject();
-    homeObject.put("world", this.world);
-    homeObject.put("x", Double.valueOf(this.vector.getX()));
-    homeObject.put("y", Double.valueOf(this.vector.getY()));
-    homeObject.put("z", Double.valueOf(this.vector.getZ()));
-    jsonObject.put("home", homeObject);
+
+  public JSONObject serialize() {
+    JSONObject homeData = new JSONObject();
+
+    homeData.put("world", this.world);
+    homeData.put("x", Double.valueOf(this.vector.getX()));
+    homeData.put("y", Double.valueOf(this.vector.getY()));
+    homeData.put("z", Double.valueOf(this.vector.getZ()));
+
+    return homeData;
   }
 }

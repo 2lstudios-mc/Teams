@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import org.bukkit.configuration.file.FileConfiguration;
+
 import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONObject;
+
 import dev._2lstudios.teams.enums.Role;
-import dev._2lstudios.teams.managers.TeamPlayerManager;
 
 public class TeamMembers {
   private final Map<String, Role> members = new HashMap<>();
@@ -43,7 +43,7 @@ public class TeamMembers {
     return toGive;
   }
 
-  public void load(Plugin plugin, TeamPlayerManager tPlayerManager, JSONObject jsonObject) {
+  public void deserialize(Plugin plugin, JSONObject jsonObject) {
     try {
       JSONObject jsonMembers = (JSONObject) jsonObject.getOrDefault("members", new JSONObject());
       for (Object memberObject : jsonMembers.entrySet()) {
@@ -64,20 +64,14 @@ public class TeamMembers {
     }
   }
 
-  @Deprecated
-  public void load(TeamPlayerManager tPlayerManager, FileConfiguration fileConfiguration) {
-    if (fileConfiguration.contains("members")) {
-      Collection<String> yamlMembers = new HashSet<>(fileConfiguration.getStringList("members"));
-      for (String member : yamlMembers)
-        this.members.put(member, Role.MIEMBRO);
-    }
-  }
+  public JSONObject serialize() {
+    JSONObject membersData = new JSONObject();
 
-  public void save(JSONObject jsonObject) {
-    JSONObject jsonMembers = new JSONObject();
-    for (Map.Entry<String, Role> member : this.members.entrySet())
-      jsonMembers.put(member.getKey(), ((Role) member.getValue()).name());
-    jsonObject.put("members", jsonMembers);
+    for (Map.Entry<String, Role> member : this.members.entrySet()) {
+      membersData.put(member.getKey(), ((Role) member.getValue()).name());
+    }
+
+      return membersData;
   }
 
   public Map<String, Role> getMembers() {

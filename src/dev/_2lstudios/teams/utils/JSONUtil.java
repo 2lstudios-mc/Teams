@@ -1,76 +1,74 @@
 package dev._2lstudios.teams.utils;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import java.io.Writer;
+import java.util.logging.Logger;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class JSONUtil {
-  private static Plugin plugin;
-
+  private static Logger logger;
   private static String dataFolder;
 
-  private static void runTask(boolean sync, Runnable runnable) {
-    if (sync) {
-      runnable.run();
-    } else if (!Bukkit.isPrimaryThread()) {
-      runnable.run();
-    } else {
-      plugin.getServer().getScheduler().runTaskAsynchronously(plugin, runnable);
-    }
-  }
-
-  public static void initialize(Plugin plugin, String dataFolder) {
-    JSONUtil.plugin = plugin;
+  public JSONUtil(final Logger logger, final String dataFolder) {
+    JSONUtil.logger = logger;
     JSONUtil.dataFolder = dataFolder;
   }
 
-  private static File create(String path) {
-    File file = new File(path.replace("%datafolder%", dataFolder));
+  private void log(final String text) {
+    if (logger != null) {
+      logger.info(text);
+    }
+  }
+
+  private File create(final String path) {
+    final File file = new File(path.replace("%datafolder%", dataFolder));
+
     try {
-      delete(path, true);
+      delete(path);
       file.getParentFile().mkdirs();
       file.createNewFile();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       e.printStackTrace();
     }
+
     return file;
   }
 
-  public static void save(String path, JSONObject jsonObject, boolean sync) {
-    Runnable runnable = () -> {
-      File file = create(path);
-      // TODO: Broken code
-    };
-    runTask(sync, runnable);
+  public void save(final String path, final JSONObject jsonObject) {
+    final File file = create(path);
+
+    try (final Writer output = new BufferedWriter(new FileWriter(file))) {
+      output.write(jsonObject.toJSONString());
+    } catch (IOException e) {
+      log("Can't save JSON: " + file.getPath());
+    }
   }
 
-  public static JSONObject get(String path) {
-    File file = new File(path.replace("%datafolder%", dataFolder));
+  public JSONObject get(final String path) {
+    final File file = new File(path.replace("%datafolder%", dataFolder));
     if (file.exists() && !file.isDirectory()) {
-      JSONParser jsonParser = new JSONParser();
-      // TODO: Broken code
+      final JSONParser jsonParser = new JSONParser();
+
+      try {
+        return (JSONObject) jsonParser.parse(new FileReader(file));
+      } catch (IOException | ParseException e) {
+        log("Can't get JSON: " + file.getPath());
+      }
     }
+
     return new JSONObject();
   }
 
-  public static void getAsync(String path, AtomicReference<JSONObject> reference, Runnable callback) {
-    runTask(false, () -> {
-      JSONObject jsonObject = get(path);
-      reference.set(jsonObject);
-      callback.run();
-    });
-  }
+  public void delete(final String path) {
+    final File file = new File(path.replace("%datafolder%", dataFolder));
 
-  public static void delete(String path, boolean sync) {
-    Runnable runnable = () -> {
-      File file = new File(path.replace("%datafolder%", dataFolder));
-      file.delete();
-    };
-    runTask(sync, runnable);
+    file.delete();
   }
 }

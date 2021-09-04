@@ -25,7 +25,7 @@ public class TeamsRenameCommand {
             Team renameTeam = teamManager.getTeam(newTeamName.toLowerCase());
             if (renameTeam != null && renameTeam.exists()) {
               sender.sendMessage(ChatColor.RED + "Ya existe un team con ese nombre!");
-            } else if (teamManager.renameTeam(team.getName(), newTeamName, true)) {
+            } else if (teamManager.renameTeam(team.getName(), newTeamName)) {
               sender.sendMessage(
                   ChatColor.GREEN + "Renombraste el team a " + ChatColor.AQUA + newTeamName + ChatColor.GREEN + "!");
             } else {

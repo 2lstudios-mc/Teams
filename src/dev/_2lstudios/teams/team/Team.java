@@ -20,6 +20,7 @@ import dev._2lstudios.teams.utils.JSONUtil;
 import dev._2lstudios.teams.utils.TeamShowBuilder;
 
 public class Team {
+  private final JSONUtil jsonUtil;
   private final TeamsManager teamsManager;
   private final TeamHome teamHome;
   private final TeamRelations teamRelations;
@@ -31,18 +32,21 @@ public class Team {
   private boolean changed;
   private boolean pvp;
 
-  public Team(Plugin plugin, TeamsManager teamsManager, String name, boolean defaultPvP) {
+  public Team(final JSONUtil jsonUtil, final Plugin plugin, final TeamsManager teamsManager, final String name, final boolean defaultPvP) {
     setName(name);
+    this.jsonUtil = jsonUtil;
     this.teamsManager = teamsManager;
     this.pvp = defaultPvP;
     this.teamHome = new TeamHome();
     this.teamRelations = new TeamRelations(getName());
     this.teamMembers = new TeamMembers();
-    TeamPlayerManager tPlayerManager = teamsManager.getTeamPlayerManager();
-    JSONObject jsonObject = JSONUtil.get("%datafolder%/teams/" + getName() + ".json");
-    this.teamRelations.load(jsonObject);
-    this.teamHome.load(jsonObject);
-    this.teamMembers.load(plugin, tPlayerManager, jsonObject);
+
+    final TeamPlayerManager tPlayerManager = teamsManager.getTeamPlayerManager();
+    final JSONObject jsonObject = jsonUtil.get("%datafolder%/teams/" + getName() + ".json");
+
+    this.teamRelations.deserialize(jsonObject);
+    this.teamHome.deserialize(jsonObject);
+    this.teamMembers.deserialize(plugin, jsonObject);
     this.displayName = (String) jsonObject.getOrDefault("displayname", this.displayName);
     this.description = (String) jsonObject.getOrDefault("description", null);
     if (this.description == null || this.description.equals("null"))
@@ -50,15 +54,23 @@ public class Team {
     this.teamRelations.setRelation(getName(), Relation.TEAM);
   }
 
-  public void save(boolean sync) {
-    String path = "%datafolder%/teams/" + getName() + ".json";
-    JSONObject jsonObject = new JSONObject();
-    this.teamRelations.save(jsonObject);
-    this.teamHome.save(jsonObject);
-    this.teamMembers.save(jsonObject);
-    jsonObject.put("displayname", getDisplayName());
-    jsonObject.put("description", this.description);
-    JSONUtil.save(path, jsonObject, sync);
+  public JSONObject serialize() {
+    final JSONObject teamData = new JSONObject();
+
+    teamData.put("relations", teamRelations.serialize());
+    teamData.put("home", teamHome.serialize());
+    teamData.put("members", teamMembers.serialize());
+    teamData.put("displayname", getDisplayName());
+    teamData.put("description", this.description);
+
+    return teamData;
+  }
+
+  public void save() {
+    final String path = "%datafolder%/teams/" + getName() + ".json";
+
+    jsonUtil.save(path, serialize());
+
     setChanged(false);
   }
 
@@ -70,21 +82,21 @@ public class Team {
     return this.displayName;
   }
 
-  public void addPlayer(TeamPlayer teamPlayer, Role role) {
-    String tPlayerName = teamPlayer.getName();
+  public void addPlayer(final TeamPlayer teamPlayer, final Role role) {
+    final String tPlayerName = teamPlayer.getName();
     sendMessage(ChatColor.translateAlternateColorCodes('&', "&b" + tPlayerName + " &ase unio a tu team!"));
     teamPlayer.setTeam(getName());
     this.teamMembers.getMembers().put(tPlayerName, role);
     setChanged(true);
   }
 
-  public void addPlayer(TeamPlayer teamPlayer) {
+  public void addPlayer(final TeamPlayer teamPlayer) {
     addPlayer(teamPlayer, Role.MIEMBRO);
   }
 
-  public void removePlayer(TeamPlayer teamPlayer) {
-    String tPlayerName = teamPlayer.getName();
-    String team = teamPlayer.getTeam();
+  public void removePlayer(final TeamPlayer teamPlayer) {
+    final String tPlayerName = teamPlayer.getName();
+    final String team = teamPlayer.getTeam();
     if (team != null && team.equals(getName()))
       teamPlayer.setTeam(null);
     this.teamMembers.getOnline().remove(tPlayerName);
@@ -100,36 +112,36 @@ public class Team {
     return this.teamMembers.getMembers();
   }
 
-  public Role getRole(String member) {
+  public Role getRole(final String member) {
     return this.teamMembers.getMembers().getOrDefault(member, Role.MIEMBRO);
   }
 
-  public Collection<String> getMembers(Role role) {
-    Collection<String> filteredMembers = new HashSet<>();
-    for (Map.Entry<String, Role> member : this.teamMembers.getMembers().entrySet()) {
+  public Collection<String> getMembers(final Role role) {
+    final Collection<String> filteredMembers = new HashSet<>();
+    for (final Map.Entry<String, Role> member : this.teamMembers.getMembers().entrySet()) {
       if (member.getValue() == role)
         filteredMembers.add(member.getKey());
     }
     return filteredMembers;
   }
 
-  public boolean isInvited(String name) {
-    for (String name1 : this.teamMembers.getInvited()) {
+  public boolean isInvited(final String name) {
+    for (final String name1 : this.teamMembers.getInvited()) {
       if (name1.equals(name))
         return true;
     }
     return false;
   }
 
-  public void addInvited(String name) {
+  public void addInvited(final String name) {
     this.teamMembers.getInvited().add(name);
   }
 
-  public void removeInvited(String name) {
+  public void removeInvited(final String name) {
     this.teamMembers.getInvited().remove(name);
   }
 
-  private void setChanged(boolean changed) {
+  private void setChanged(final boolean changed) {
     this.changed = changed;
   }
 
@@ -137,7 +149,7 @@ public class Team {
     return this.changed;
   }
 
-  public void setPvp(boolean pvp) {
+  public void setPvp(final boolean pvp) {
     this.pvp = pvp;
   }
 
@@ -150,16 +162,16 @@ public class Team {
   }
 
   public int getKills() {
-    Server server = Bukkit.getServer();
-    TeamPlayerManager tPlayerManager = this.teamsManager.getTeamPlayerManager();
+    final Server server = Bukkit.getServer();
+    final TeamPlayerManager tPlayerManager = this.teamsManager.getTeamPlayerManager();
     int kills = 0;
-    for (String memberName : this.teamMembers.getMembers().keySet()) {
-      TeamPlayer teamPlayer = tPlayerManager.getPlayer(memberName);
+    for (final String memberName : this.teamMembers.getMembers().keySet()) {
+      final TeamPlayer teamPlayer = tPlayerManager.getPlayer(memberName);
       if (teamPlayer != null) {
-        UUID uuid = teamPlayer.getUUID();
+        final UUID uuid = teamPlayer.getUUID();
         try {
           kills += Integer.parseInt(PlaceholderAPI.setPlaceholders(server.getPlayer(uuid), "%statistic_player_kills%"));
-        } catch (NumberFormatException numberFormatException) {
+        } catch (final NumberFormatException numberFormatException) {
         }
       }
     }
@@ -170,26 +182,26 @@ public class Team {
     return this.teamHome;
   }
 
-  public void sendMessage(Collection<String> filter, String message) {
-    Server server = Bukkit.getServer();
-    for (String memberName : this.teamMembers.getOnline()) {
+  public void sendMessage(final Collection<String> filter, final String message) {
+    final Server server = Bukkit.getServer();
+    for (final String memberName : this.teamMembers.getOnline()) {
       if (!filter.contains(memberName)) {
-        Player player = server.getPlayer(memberName);
+        final Player player = server.getPlayer(memberName);
         if (player != null)
           player.sendMessage(message);
       }
     }
   }
 
-  public void sendMessage(String message) {
+  public void sendMessage(final String message) {
     sendMessage(new HashSet<>(), message);
   }
 
   public String getShow() {
-    Server server = Bukkit.getServer();
-    TeamShowBuilder teamShowBuilder = new TeamShowBuilder(server, this.teamsManager.getTeamManager());
-    Location home = this.teamHome.getHome(server);
-    String homeInfo = (home == null) ? "N/A"
+    final Server server = Bukkit.getServer();
+    final TeamShowBuilder teamShowBuilder = new TeamShowBuilder(server, this.teamsManager.getTeamManager());
+    final Location home = this.teamHome.getHome(server);
+    final String homeInfo = (home == null) ? "N/A"
         : ("Mundo: " + home.getWorld().getEnvironment().name() + " X: " + (int) home.getX() + " Z: "
             + (int) home.getZ());
     String showFormat = teamShowBuilder.getFormat().replace("%name%", getDisplayName()).replace("%home%", homeInfo)
@@ -212,7 +224,7 @@ public class Team {
     return System.currentTimeMillis() - this.lastUpdate;
   }
 
-  public void setDescription(String description) {
+  public void setDescription(final String description) {
     setChanged(true);
     this.description = description;
   }
@@ -221,7 +233,7 @@ public class Team {
     return this.teamRelations;
   }
 
-  public void setName(String newTeamName) {
+  public void setName(final String newTeamName) {
     setChanged(true);
     this.displayName = newTeamName;
     this.name = newTeamName.toLowerCase();

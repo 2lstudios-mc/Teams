@@ -3,14 +3,13 @@ package dev._2lstudios.teams.team;
 import java.util.UUID;
 
 import org.bukkit.OfflinePlayer;
-import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONObject;
 
 import dev._2lstudios.teams.enums.ChatMode;
-import dev._2lstudios.teams.managers.TeamManager;
 import dev._2lstudios.teams.utils.JSONUtil;
 
 public class TeamPlayer {
+  private final JSONUtil jsonUtil;
   private final UUID uuid;
   private final String name;
   private ChatMode chatMode;
@@ -19,7 +18,8 @@ public class TeamPlayer {
   private boolean changed;
   private boolean online;
 
-  public TeamPlayer(Plugin plugin, TeamManager teamManager, OfflinePlayer offlinePlayer, String name) {
+  public TeamPlayer(JSONUtil jsonUtil, OfflinePlayer offlinePlayer, String name) {
+    this.jsonUtil = jsonUtil;
     this.uuid = offlinePlayer.getUniqueId();
     this.name = name;
     this.chatMode = ChatMode.NORMAL;
@@ -27,7 +27,7 @@ public class TeamPlayer {
     this.online = offlinePlayer.isOnline();
     String dataPath = "%datafolder%/players/" + this.uuid.toString() + ".json";
 
-    deserialize(JSONUtil.get(dataPath));
+    deserialize(jsonUtil.get(dataPath));
   }
 
   public void deserialize(final JSONObject json) {
@@ -42,13 +42,13 @@ public class TeamPlayer {
     return playerData;
   }
 
-  public void save(boolean sync) {
+  public void save() {
     String dataPath = "%datafolder%/players/" + this.uuid.toString() + ".json";
 
     if (this.team != null) {
-      JSONUtil.save(dataPath, serialize(), sync);
+      jsonUtil.save(dataPath, serialize());
     } else {
-      JSONUtil.delete(dataPath, sync);
+      jsonUtil.delete(dataPath);
     }
 
     setChanged(false);

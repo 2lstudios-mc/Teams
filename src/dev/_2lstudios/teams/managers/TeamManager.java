@@ -15,12 +15,14 @@ import dev._2lstudios.teams.utils.JSONUtil;
 
 public class TeamManager {
   private static final Pattern WORDS_PATTERN = Pattern.compile("[^\\w]");
+  private final JSONUtil jsonUtil;
   private final Plugin plugin;
   private final TeamsManager teamsManager;
   private final Map<String, Team> teamMap = new HashMap<>();
   private final boolean defaultPvP;
 
-  TeamManager(Plugin plugin, ConfigurationUtil configurationUtil, TeamsManager teamsManager) {
+  TeamManager(JSONUtil jsonUtil, Plugin plugin, ConfigurationUtil configurationUtil, TeamsManager teamsManager) {
+    this.jsonUtil = jsonUtil;
     this.plugin = plugin;
     this.teamsManager = teamsManager;
     YamlConfiguration yamlConfiguration = configurationUtil.getConfiguration("%datafolder%/config.yml");
@@ -41,9 +43,9 @@ public class TeamManager {
       if (this.teamMap.containsKey(teamName.toLowerCase())) {
         team = this.teamMap.get(teamName.toLowerCase());
       } else {
-        team = new Team(this.plugin, this.teamsManager, teamName, this.defaultPvP);
+        team = new Team(this.jsonUtil, this.plugin, this.teamsManager, teamName, this.defaultPvP);
         if (!team.exists() && team.getMembers().size() > 0) {
-          deleteTeam(team, true, true);
+          deleteTeam(team, true);
           this.plugin.getLogger().info("Deleted team " + teamName + " because it had no leader!");
         } else {
           addTeam(team);
@@ -59,16 +61,16 @@ public class TeamManager {
     return this.teamMap.values();
   }
 
-  public void deleteTeam(Team team, boolean removeMap, boolean sync) {
+  public void deleteTeam(Team team, boolean removeMap) {
     String name = team.getName();
-    JSONUtil.delete("%datafolder%/teams/" + name + ".json", sync);
+    jsonUtil.delete("%datafolder%/teams/" + name + ".json");
     if (removeMap)
       this.teamMap.remove(name);
     for (String teamPlayerName : new HashSet<>(team.getMembers().keySet()))
       team.removePlayer(this.teamsManager.getTeamPlayerManager().getPlayer(teamPlayerName));
   }
 
-  public boolean renameTeam(String oldTeamName, String newTeamName, boolean sync) {
+  public boolean renameTeam(String oldTeamName, String newTeamName) {
     if (this.teamMap.containsKey(oldTeamName)) {
       Team team = this.teamMap.get(oldTeamName);
       team.setName(newTeamName);
@@ -79,24 +81,24 @@ public class TeamManager {
       }
       this.teamMap.remove(oldTeamName);
       this.teamMap.put(name, team);
-      JSONUtil.delete("%datafolder%/teams/" + name + ".json", sync);
+      jsonUtil.delete("%datafolder%/teams/" + name + ".json");
       return true;
     }
     return false;
   }
 
-  public void update(boolean ignoreOnline, boolean sync) {
+  public void save(boolean ignoreOnline) {
     for (Iterator<Map.Entry<String, Team>> iterator = this.teamMap.entrySet().iterator(); iterator.hasNext();) {
       Map.Entry<String, Team> teamEntry = iterator.next();
       Team team = teamEntry.getValue();
       if (!team.exists()) {
-        deleteTeam(team, false, sync);
+        deleteTeam(team, false);
         iterator.remove();
         continue;
       }
       if (ignoreOnline || team.getTeamMembers().getOnline().isEmpty()) {
         if (team.isChanged())
-          team.save(sync);
+          team.save();
         if (team.lastUpdate() > 60000L)
           iterator.remove();
       }

@@ -17,7 +17,7 @@ class TeamsDeleteCommand {
       
       if (team != null && team.getRole(senderName) == Role.LIDER) {
         team.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cEl team fue eliminado por el lider &b" + senderName + "&c!"));
-        teamManager.deleteTeam(team, true, false);
+        teamManager.deleteTeam(team, true);
         teamPlayer.setTeam(null);
         sender.sendMessage(ChatColor.GREEN + "Se elimino tu team correctamente!");
       } else {
