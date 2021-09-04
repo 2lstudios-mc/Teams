@@ -3,7 +3,6 @@ package dev._2lstudios.teams;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -17,17 +16,15 @@ import dev._2lstudios.teams.listeners.EntityDamageListener;
 import dev._2lstudios.teams.listeners.PlayerJoinListener;
 import dev._2lstudios.teams.listeners.PlayerMoveListener;
 import dev._2lstudios.teams.listeners.PlayerQuitListener;
-import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamManager;
+import dev._2lstudios.teams.managers.TeamPlayerManager;
 import dev._2lstudios.teams.managers.TeamsManager;
 import dev._2lstudios.teams.placeholders.TeamsPlaceholders;
 import dev._2lstudios.teams.team.Team;
 import dev._2lstudios.teams.utils.ConfigurationUtil;
 import dev._2lstudios.teams.utils.JSONUtil;
-import net.milkbowl.vault.economy.Economy;
 
 public class Teams extends JavaPlugin {
-  private Economy economy;
   private static TeamsManager teamsManager;
   private TeamsPlaceholders teamsPlaceholders = null;
 
@@ -39,21 +36,12 @@ public class Teams extends JavaPlugin {
     configurationUtil.createConfiguration("%datafolder%/config.yml");
   }
 
-  private void setupEconomy() {
-    if (getServer().getPluginManager().getPlugin("Vault") != null) {
-      RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-      if (rsp != null)
-        this.economy = (Economy) rsp.getProvider();
-    }
-  }
-
   public void onEnable() {
     Server server = getServer();
     BukkitScheduler scheduler = server.getScheduler();
     PluginManager pluginManager = server.getPluginManager();
     ConfigurationUtil configurationUtil = new ConfigurationUtil(this);
 
-    setupEconomy();
     setupConfigurations(configurationUtil);
     JSONUtil.initialize(this, getDataFolder().toString());
     teamsManager = new TeamsManager(this, configurationUtil);
@@ -78,7 +66,7 @@ public class Teams extends JavaPlugin {
 
     boolean homesEnabled = configurationUtil.getConfiguration("%datafolder%/config.yml").getBoolean("homes", true);
 
-    getCommand("teams").setExecutor(new TeamsCommand(this, this.economy, teamsManager, homesEnabled));
+    getCommand("teams").setExecutor(new TeamsCommand(this, teamsManager, homesEnabled));
     getCommand("tl").setExecutor(new TellLocationCommand(this, teamsManager));
     getCommand("hq").setExecutor(new HeadQuartersCommand(this, teamsManager, homesEnabled));
 

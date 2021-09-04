@@ -21,25 +21,14 @@ import dev._2lstudios.teams.utils.TeamShowBuilder;
 
 public class Team {
   private final TeamsManager teamsManager;
-
   private final TeamHome teamHome;
-
   private final TeamRelations teamRelations;
-
   private final TeamMembers teamMembers;
-
   private String name;
-
   private String displayName;
-
   private String description;
-
   private long lastUpdate;
-
-  private double money;
-
   private boolean changed;
-
   private boolean pvp;
 
   public Team(Plugin plugin, TeamsManager teamsManager, String name, boolean defaultPvP) {
@@ -55,7 +44,6 @@ public class Team {
     this.teamHome.load(jsonObject);
     this.teamMembers.load(plugin, tPlayerManager, jsonObject);
     this.displayName = (String) jsonObject.getOrDefault("displayname", this.displayName);
-    this.money = Double.parseDouble(String.valueOf(jsonObject.getOrDefault("money", Integer.valueOf(0))));
     this.description = (String) jsonObject.getOrDefault("description", null);
     if (this.description == null || this.description.equals("null"))
       this.description = null;
@@ -69,7 +57,6 @@ public class Team {
     this.teamHome.save(jsonObject);
     this.teamMembers.save(jsonObject);
     jsonObject.put("displayname", getDisplayName());
-    jsonObject.put("money", Double.valueOf(this.money));
     jsonObject.put("description", this.description);
     JSONUtil.save(path, jsonObject, sync);
     setChanged(false);
@@ -179,15 +166,6 @@ public class Team {
     return kills;
   }
 
-  public void setMoney(double money) {
-    this.money = money;
-    setChanged(true);
-  }
-
-  public double getMoney() {
-    return this.money;
-  }
-
   public TeamHome getTeamHome() {
     return this.teamHome;
   }
@@ -215,7 +193,7 @@ public class Team {
         : ("Mundo: " + home.getWorld().getEnvironment().name() + " X: " + (int) home.getX() + " Z: "
             + (int) home.getZ());
     String showFormat = teamShowBuilder.getFormat().replace("%name%", getDisplayName()).replace("%home%", homeInfo)
-        .replace("%kills%", String.valueOf(getKills())).replace("%money%", String.valueOf(getMoney()));
+        .replace("%kills%", String.valueOf(getKills()));
     if (this.description != null) {
       showFormat = showFormat.replace("%description%", this.description);
     } else {

@@ -12,9 +12,7 @@ import dev._2lstudios.teams.managers.TeamPlayerManager;
 
 public class TeamMembers {
   private final Map<String, Role> members = new HashMap<>();
-
   private final Collection<String> online = new HashSet<>();
-
   private final Collection<String> invited = new HashSet<>();
 
   public Role promote(String memberName) {

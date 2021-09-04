@@ -14,7 +14,7 @@ import dev._2lstudios.teams.team.TeamRelations;
 public class TeamShowBuilder {
   private final Server server;
   private final TeamManager teamManager;
-  private static final String FORMAT = "&aInformacion de %name%:\n&eHome: &7%home%\n&eKills: &c%kills%\n&eDinero: &6$%money%\n&eLideres: &7(&b%leaders_size%&7) %leaders%\n&eCoLideres: &7(&b%coleaders_size%&7) %coleaders%\n&eMods: &7(&b%mods_size%&7) %mods%\n&eMiembros: &7(&b%members_size%&7) %members%\n&eAliados: &7(&b%allies_amount%&7) &b%allies%\n&eDescripcion: &7%description%";
+  private static final String FORMAT = "&aInformacion de %name%:\n&eHome: &7%home%\n&eKills: &c%kills%\n&eLideres: &7(&b%leaders_size%&7) %leaders%\n&eCoLideres: &7(&b%coleaders_size%&7) %coleaders%\n&eMods: &7(&b%mods_size%&7) %mods%\n&eMiembros: &7(&b%members_size%&7) %members%\n&eAliados: &7(&b%allies_amount%&7) &b%allies%\n&eDescripcion: &7%description%";
   
   public TeamShowBuilder(Server server, TeamManager teamManager) {
     this.server = server;

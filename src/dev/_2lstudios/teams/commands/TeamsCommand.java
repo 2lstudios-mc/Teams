@@ -1,6 +1,5 @@
 package dev._2lstudios.teams.commands;
 
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
@@ -16,16 +15,14 @@ import dev._2lstudios.teams.teleport.TeleportSystem;
 public class TeamsCommand implements CommandExecutor {
   private final Plugin plugin;
   private final Server server;
-  private final Economy economy;
   private final TeamManager teamManager;
   private final TeamPlayerManager teamPlayerManager;
   private final TeleportSystem teleportSystem;
   private final boolean homesEnabled;
 
-  public TeamsCommand(Plugin plugin, Economy economy, TeamsManager teamsManager, boolean homesEnabled) {
+  public TeamsCommand(Plugin plugin, TeamsManager teamsManager, boolean homesEnabled) {
     this.plugin = plugin;
     this.server = plugin.getServer();
-    this.economy = economy;
     this.teamManager = teamsManager.getTeamManager();
     this.teamPlayerManager = teamsManager.getTeamPlayerManager();
     this.teleportSystem = teamsManager.getTeleportSystem();
@@ -79,10 +76,6 @@ public class TeamsCommand implements CommandExecutor {
           new TeamsPromoteCommand(server, teamPlayerManager, teamManager, sender, args);
         } else if (args[0].equals("demote")) {
           new TeamsDemoteCommand(server, teamPlayerManager, teamManager, sender, args);
-        } else if (args[0].equals("deposit") || args[0].equals("d")) {
-          new TeamsDepositCommand(economy, teamPlayerManager, teamManager, sender, args);
-        } else if (args[0].equals("withdraw") || args[0].equals("w")) {
-          new TeamsWithdrawCommand(economy, teamPlayerManager, teamManager, sender, args);
         } else if (args[0].equals("description") || args[0].equals("desc")) {
           new TeamsDescriptionCommand(teamPlayerManager, teamManager, sender, args);
         } else if (args[0].equals("ally")) {

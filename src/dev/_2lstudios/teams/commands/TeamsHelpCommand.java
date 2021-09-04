@@ -23,8 +23,6 @@ class TeamsHelpCommand {
     helpBuilder.append(applyFormat(label, "sethome", "Establece al hogar de tu team!"));
     helpBuilder.append(applyFormat(label, "promote", "Promueve a alguien de tu team!"));
     helpBuilder.append(applyFormat(label, "demote", "Degrada a alguien de tu team!"));
-    helpBuilder.append(applyFormat(label, "deposit", "Ingresa dinero a tu team!"));
-    helpBuilder.append(applyFormat(label, "withdraw", "Retira dinero de tu team!"));
     helpBuilder.append(applyFormat(label, "pvp", "Alterna el PvP en tu team!"));
     helpBuilder.append(applyFormat(label, "chat", "Alterna el modo de chat con team!"));
     helpBuilder.append(applyFormat(label, "tl", "Muestra tus coordenadas a tu team!"));
