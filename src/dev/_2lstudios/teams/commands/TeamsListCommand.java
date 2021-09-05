@@ -36,7 +36,7 @@ class TeamsListCommand {
     int totalPlayers = team.getMembers().size();
     int kills = team.getKills();
     String teamName = team.getDisplayName();
-    String teamInfo = "&f " + (index + 1) + ". &c" + teamName + "&7 [&a" + onlinePlayers + "&7/&b" + totalPlayers
+    String teamInfo = "\n&f " + (index + 1) + ". &c" + teamName + "&7 [&a" + onlinePlayers + "&7/&b" + totalPlayers
         + "&7 Online] [&c" + kills + "&7 Kills]";
     if (sender instanceof Player) {
       ComponentBuilder entryComponent = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', teamInfo));
