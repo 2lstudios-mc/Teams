@@ -53,7 +53,9 @@ public class Teams extends JavaPlugin {
       String playerName = player.getName();
       Team team = teamManager.getTeam(tPlayerManager.getPlayer(playerName).getTeam());
 
-      team.getTeamMembers().getOnline().add(playerName);
+      if (team != null) {
+        team.getTeamMembers().getOnline().add(playerName);
+      }
     }
 
     pluginManager.registerEvents(new AsyncPlayerChatListener(teamsManager), this);
