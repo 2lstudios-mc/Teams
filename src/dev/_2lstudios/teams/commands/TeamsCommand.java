@@ -47,7 +47,7 @@ public class TeamsCommand implements CommandExecutor {
         } else if (args[0].equals("chat") || args[0].equals("c")) {
           new TeamsChatCommand(teamPlayerManager, sender);
         } else if (args[0].equals("tl")) {
-          new TeamsTellLocationCommand(teamPlayerManager, teamManager, sender);
+          new TellLocationCommand(plugin, teamPlayerManager, teamManager).onCommand(sender, command, label, args);
         } else if (args[0].equals("list")) {
           new TeamsListCommand(teamManager, sender, args);
         } else if (args[0].equals("show") || args[0].equals("who")) {
@@ -88,6 +88,7 @@ public class TeamsCommand implements CommandExecutor {
         }
       }
     });
+    
     return true;
   }
 }

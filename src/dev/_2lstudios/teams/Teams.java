@@ -47,11 +47,11 @@ public class Teams extends JavaPlugin {
     teamsManager = new TeamsManager(jsonUtil, this, configurationUtil);
 
     TeamManager teamManager = teamsManager.getTeamManager();
-    TeamPlayerManager tPlayerManager = teamsManager.getTeamPlayerManager();
+    TeamPlayerManager teamPlayerManager = teamsManager.getTeamPlayerManager();
 
     for (Player player : server.getOnlinePlayers()) {
       String playerName = player.getName();
-      Team team = teamManager.getTeam(tPlayerManager.getPlayer(playerName).getTeam());
+      Team team = teamManager.getTeam(teamPlayerManager.getPlayer(playerName).getTeam());
 
       if (team != null) {
         team.getTeamMembers().getOnline().add(playerName);
@@ -69,7 +69,7 @@ public class Teams extends JavaPlugin {
     boolean homesEnabled = configurationUtil.getConfiguration("%datafolder%/config.yml").getBoolean("homes", true);
 
     getCommand("teams").setExecutor(new TeamsCommand(this, teamsManager, homesEnabled));
-    getCommand("tl").setExecutor(new TellLocationCommand(this, teamsManager));
+    getCommand("tl").setExecutor(new TellLocationCommand(this, teamPlayerManager, teamManager));
     getCommand("hq").setExecutor(new HeadQuartersCommand(this, teamsManager, homesEnabled));
 
     if (pluginManager.isPluginEnabled("PlaceholderAPI")) {
@@ -79,7 +79,7 @@ public class Teams extends JavaPlugin {
 
     scheduler.runTaskTimerAsynchronously(this, () -> {
       teamManager.save(false);
-      tPlayerManager.save(false);
+      teamPlayerManager.save(false);
     }, 1200L, 1200L);
 
     scheduler.runTaskTimer(this, teamsManager.getTeleportSystem(), 20L, 20L);
