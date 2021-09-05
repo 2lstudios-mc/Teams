@@ -31,20 +31,40 @@ class TeamsListCommand {
     return onlineTeams;
   }
 
-  private void sendTeamEntry(CommandSender sender, Team team, int index) {
+  private void addEntry(CommandSender sender, Team team, int index, ComponentBuilder component) {
     int onlinePlayers = team.getTeamMembers().getOnline().size();
     int totalPlayers = team.getMembers().size();
+    int kills = team.getKills();
     String teamName = team.getDisplayName();
-    String teamInfo = "&f " + (index + 1) + ". &c" + teamName + "&7 [&a" + onlinePlayers + "&7/" + totalPlayers
-        + " Online]";
+    String teamInfo = "&f " + (index + 1) + ". &c" + teamName + "&7 [&a" + onlinePlayers + "&7/&b" + totalPlayers
+        + "&7 Online] [&c" + kills + "&7 Kills]";
     if (sender instanceof Player) {
-      ComponentBuilder component = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', teamInfo));
-      component.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/f who " + teamName));
-      component.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, INFORMATION_COMPONENT));
-      ((Player) sender).spigot().sendMessage(component.create());
+      ComponentBuilder entryComponent = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', teamInfo));
+      entryComponent.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/f who " + teamName));
+      entryComponent.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, INFORMATION_COMPONENT));
+      component.append(entryComponent.create());
     } else {
       sender.sendMessage(ChatColor.translateAlternateColorCodes('&', teamInfo));
     }
+  }
+
+  private void sendTeamEntry(final int page, final TeamManager teamManager, final CommandSender sender) {
+    List<Team> onlineTeams = getOnlineTeams(teamManager);
+    int onlineTeamsSize = onlineTeams.size();
+    int maxPage = 1 + (onlineTeamsSize - 1) / 10;
+    if (page > maxPage) {
+      sender.sendMessage(ChatColor.RED + "Pagina no encontrada!");
+      return;
+    }
+    int maxEntryNumber = page * 10;
+    String header = ChatColor.translateAlternateColorCodes('&', ChatColor.translateAlternateColorCodes('&', "&aLista de Teams: &7(Pagina " + page + "/" + maxPage + ")"));
+    ComponentBuilder component = new ComponentBuilder(header);
+    for (int i = maxEntryNumber - 10; i < maxEntryNumber && i >= 0 && i < onlineTeamsSize; i++) {
+      Team team = onlineTeams.get(i);
+      addEntry(sender, team, i, component);
+    }
+
+    ((Player) sender).spigot().sendMessage(component.create());
   }
 
   TeamsListCommand(TeamManager teamManager, CommandSender sender, String[] args) {
@@ -58,19 +78,7 @@ class TeamsListCommand {
       sender.sendMessage(ChatColor.RED + "Especifica una pagina mayor a 0!");
       return;
     }
-    List<Team> onlineTeams = getOnlineTeams(teamManager);
-    int onlineTeamsSize = onlineTeams.size();
-    int maxPage = onlineTeamsSize / 10 + 1;
-    if (page > maxPage) {
-      sender.sendMessage(ChatColor.RED + "Pagina no encontrada!");
-      return;
-    }
-    int maxEntryNumber = page * 10;
-    sender.sendMessage(
-        ChatColor.translateAlternateColorCodes('&', "&aLista de Teams: &7(Pagina " + page + "/" + maxPage + ")"));
-    for (int i = maxEntryNumber - 10; i < maxEntryNumber && i >= 0 && i < onlineTeamsSize; i++) {
-      Team team = onlineTeams.get(i);
-      sendTeamEntry(sender, team, i);
-    }
+
+    sendTeamEntry(page, teamManager, sender);
   }
 }
